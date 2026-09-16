@@ -22,7 +22,16 @@
 
     <div class="control">
       <label for="confirm-password">Confirm Password</label>
-      <input id="confirm-password" type="password" name="confirm-password" />
+      <input
+        id="confirm-password"
+        type="password"
+        name="confirm-password"
+        formControlName="confirmPassword"
+      />
+
+      @if (confirmPasswordIsInvalid) {
+        <p class="control-error">Must match password field.</p>
+      }
     </div>
   </div>
 
