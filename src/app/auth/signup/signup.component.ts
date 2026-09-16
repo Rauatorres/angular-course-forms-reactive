@@ -7,11 +7,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { of } from 'rxjs';
 
-// function confirmPasswordIsValid(control: AbstractControl){
-//   if(control.value != )
-// }
+function confirmPasswordIsValid(controlName1: string, controlName2: string) {
+  return (control: AbstractControl) => {
+    if (control.get(controlName1)?.value == control.get(controlName2)?.value) {
+      return null;
+    }
+    return { confirmPasswordIsNotValid: true };
+  };
+}
 
 @Component({
   selector: 'app-signup',
@@ -27,12 +31,17 @@ export class SignupComponent implements OnInit {
     email: new FormControl('', {
       validators: [Validators.email, Validators.required],
     }),
-    passwordGroup: new FormGroup({
-      password: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(6)],
-      }),
-      confirmPassword: new FormControl(''),
-    }),
+    passwordGroup: new FormGroup(
+      {
+        password: new FormControl('', {
+          validators: [Validators.required, Validators.minLength(6)],
+        }),
+        confirmPassword: new FormControl(''),
+      },
+      {
+        validators: [confirmPasswordIsValid('password', 'confirmPassword')],
+      },
+    ),
     firstName: new FormControl('', { validators: [Validators.required] }),
     lastName: new FormControl('', { validators: [Validators.required] }),
     address: new FormGroup({
@@ -64,16 +73,22 @@ export class SignupComponent implements OnInit {
     );
   }
 
-  // get confirmPasswordIsInvalid() {
-  //   return (
-  //     this.form.hasError('confirmPasswordIsInvalid') &&
-  //     (this.form.controls.confirmPassword.dirty || this.form.controls.password.dirty)
-  //   );
-  // }
+  get confirmPasswordIsInvalid() {
+    return (
+      this.form.controls.passwordGroup.invalid &&
+      (this.form.controls.passwordGroup.controls.confirmPassword.dirty ||
+        this.form.controls.passwordGroup.controls.password.dirty)
+    );
+  }
 
   ngOnInit(): void {}
 
   onSubmit() {
+    if (this.form.invalid) {
+      console.log('INVALID FORM');
+      return;
+    }
+
     console.log(this.form.value);
   }
 

@@ -29,9 +29,9 @@
         formControlName="confirmPassword"
       />
 
-      <!-- @if (confirmPasswordIsInvalid) {
+      @if (confirmPasswordIsInvalid) {
         <p class="control-error">Must match password field.</p>
-      } -->
+      }
     </div>
   </div>
 
@@ -120,6 +120,10 @@
       </label>
     </div>
   </div>
+
+  @if (form.invalid && form.touched) {
+    <p class="control-error">Invalid form - please check your input data.</p>
+  }
 
   <p class="form-actions">
     <button type="reset" class="button button-flat" (click)="onReset()">Reset</button>
