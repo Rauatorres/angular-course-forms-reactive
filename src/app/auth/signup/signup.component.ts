@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -43,6 +44,7 @@ export class SignupComponent implements OnInit {
     role: new FormControl<'student' | 'teacher' | 'employee' | 'founder' | 'other'>('student', {
       validators: [Validators.required],
     }),
+    source: new FormArray([new FormControl(false), new FormControl(false), new FormControl(false)]),
     agree: new FormControl(false, [Validators.required]),
   });
 
@@ -72,8 +74,7 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    console.log(this.form.value.email);
-    console.log(this.form.controls.passwordGroup.value.password);
+    console.log(this.form.value);
   }
 
   onReset() {
